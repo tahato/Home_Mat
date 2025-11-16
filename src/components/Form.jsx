@@ -48,7 +48,7 @@ export default function Form() {
           setItem('company_app', res.data.company_app);
           setItem('userName', res.data.admin.name);
           setItem('appId', res.data.company_id);
-          navigation.navigate('Home')
+          navigation.navigate('HomeNavigation');
           // router.replace("./home");
         })
         .catch(err => {
