@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { getItem } from '../tools/AsyncStorage';
 
-export default function index() {
+export default function Index() {
   const navigation=useNavigation();
 
   const getToken = async () => {
     const token = await getItem('token');
-    navigation.navigate(!!token ? 'HomeNavigation' : 'login');
+    navigation.navigate(!!token ? 'HomeNavigation' : 'Login');
     //  router.replace('/login');
   };
   useEffect(() => {

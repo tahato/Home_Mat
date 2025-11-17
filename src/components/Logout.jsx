@@ -7,7 +7,6 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 export default function Logout() {
   const API_URL = 'https://homemattest.scriptdzshock.com';
-  const company_code = 'b2fb';
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const handlLogout = async () => {
@@ -16,7 +15,7 @@ export default function Logout() {
       const companyApp = await getItem('company_app');
       await axios
         .post(
-          `${API_URL}/api/logout?company_app=${company_code}`,
+          `${API_URL}/api/logout?company_app=${companyApp}`,
           {},
           {
             headers: {
@@ -30,7 +29,7 @@ export default function Logout() {
           AsyncStorage.removeItem('token');
           AsyncStorage.removeItem('company_app');
           setModalVisible(false);
-          navigation.navigate('login');
+          navigation.navigate('Login');
         })
         .catch(e => console.log('errrrrorrr', e.message));
     } catch (error) {

@@ -1,167 +1,174 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, { useCallback, useState } from 'react';
 import { useGlobalContext } from '../../context/GlobaleProvider';
 import { useFocusEffect } from '@react-navigation/native';
 import { getBillItems } from '../../api/getBillItems';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 
-
 export default function Bill() {
- const [bill, setBill] = useState([]);
- const [items, setItems] = useState([]);
- const [loading, setLoading] = useState(true);
- const [tva, setTva] = useState('');
- const { billId, client } = useGlobalContext();
- useFocusEffect(
-   useCallback(() => {
-     if (billId) {
-       fetchData();
-     } else {
-       setLoading(false);
-     }
-   }, []),
- );
- const fetchData = async () => {
-   try {
-     const data = await getBillItems(billId);
-     setBill(data);
-     setItems(data.items);
-     setTva(data.taxevalues[0].value);
-     setLoading(false);
-   } catch (e) {
-     console.log('error get project', e);
-   }
- };
- return (
-   <>
-     {loading ? (
-       <View style={styles.loading}>
-         <ActivityIndicator size="large" color="#007bff" />
-       </View>
-     ) : !billId ? (
-       <View
-         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-       >
-         <Text>Aucune facture trouvée </Text>
-       </View>
-     ) : (
-       <ScrollView style={styles.container}>
-         {/* Header */}
-         <View style={styles.header}>
-           <Ionicons name="receipt-outline" size={28} color="#293846" />
-           <Text style={styles.title}> Facture</Text>
-         </View>
+  const [bill, setBill] = useState([]);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [tva, setTva] = useState('');
+  const { billId, client } = useGlobalContext();
+  useFocusEffect(
+    useCallback(() => {
+      if (billId) {
+        fetchData();
+      } else {
+        setLoading(false);
+      }
+    }, [billId]),
+  );
+  const fetchData = async () => {
+    try {
+      const data = await getBillItems(billId);
+      setBill(data);
+      setItems(data.items);
+      setTva(data.taxevalues[0].value);
+      setLoading(false);
+    } catch (e) {
+      console.log('error get project', e);
+    }
+  };
+  return (
+    <>
+      {loading ? (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#007bff" />
+        </View>
+      ) : !billId ? (
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Text>Aucune facture trouvée </Text>
+        </View>
+      ) : (
+        <ScrollView style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Ionicons name="receipt-outline" size={28} color="#293846" />
+            <Text style={styles.title}> Facture</Text>
+          </View>
 
-         {/* Info section */}
-         <View style={styles.card}>
-           <Text style={styles.text}>
-             Plan de pose N°:{' '}
-             <Text style={{ fontWeight: 'bold' }}>
-               {bill.number2 ?? bill.number1}
-             </Text>
-           </Text>
-           <Text style={styles.text}>
-             Client: <Text style={{ fontWeight: 'bold' }}>{client}</Text>
-           </Text>
-           <Text style={styles.text}>
-             Date:{' '}
-             <Text style={{ fontWeight: 'bold' }}>
-               {moment(bill.date2 ?? bill.data1).format('DD/MM/YYYY')}
-             </Text>
-           </Text>
-         </View>
+          {/* Info section */}
+          <View style={styles.card}>
+            <Text style={styles.text}>
+              Plan de pose N°:{' '}
+              <Text style={{ fontWeight: 'bold' }}>
+                {bill.number2 ?? bill.number1}
+              </Text>
+            </Text>
+            <Text style={styles.text}>
+              Client: <Text style={{ fontWeight: 'bold' }}>{client}</Text>
+            </Text>
+            <Text style={styles.text}>
+              Date:{' '}
+              <Text style={{ fontWeight: 'bold' }}>
+                {moment(bill.date2 ?? bill.data1).format('DD/MM/YYYY')}
+              </Text>
+            </Text>
+          </View>
 
-         <View style={styles.card}>
-           {/* bill table */}
-           <View style={styles.table}>
-             <View style={styles.row}>
-               <Text style={{ fontWeight: '600', fontSize: 15, width: '10%' }}>
-                 N°
-               </Text>
-               <Text style={{ fontWeight: '600', fontSize: 15, width: '50%' }}>
-                 Produit
-               </Text>
-               <Text
-                 style={{
-                   fontWeight: '600',
-                   fontSize: 15,
-                   width: '15%',
-                   textAlign: 'right',
-                 }}
-               >
-                 Qtt
-               </Text>
-               <Text
-                 style={{
-                   fontWeight: '600',
-                   fontSize: 15,
-                   width: '25%',
-                   textAlign: 'right',
-                 }}
-               >
-                 Total
-               </Text>
-             </View>
-             {items.map((item, index) => (
-               <View
-                 key={item.id}
-                 style={[
-                   styles.row,
-                   index % 2 === 0
-                     ? { backgroundColor: '#fff' }
-                     : { backgroundColor: '#f3f4f6' },
-                 ]}
-               >
-                 <Text style={{ fontSize: 15, width: '10%' }}>{index + 1}</Text>
-                 <Text style={{ fontSize: 15, width: '50%' }}>
-                   {item.description}
-                 </Text>
-                 <Text
-                   style={{ fontSize: 15, width: '15%', textAlign: 'right' }}
-                 >
-                   {parseFloat(item.quantity).toFixed(2)}{' '}
-                 </Text>
-                 <Text
-                   style={{ fontSize: 15, width: '25%', textAlign: 'right' }}
-                 >
-                   {parseFloat(item.price * item.quantity).toFixed(2)} €
-                 </Text>
-               </View>
-             ))}
-           </View>
-           {/* Totals */}
-         </View>
-         <View style={{ alignItems: 'flex-end' }}>
-           <View style={[styles.card]}>
-             <View style={styles.row}>
-               <Text style={styles.text}>TOTAL HT </Text>
-               <Text style={styles.text}>
-                 {parseFloat(bill.ht).toFixed(2)} €
-               </Text>
-             </View>
-             <View style={styles.row}>
-               <Text style={styles.text}>TVA {tva}% </Text>
-               <Text style={styles.text}>
-                 {parseFloat((bill.ht * tva) / 100).toFixed(2)} €
-               </Text>
-             </View>
-             <View style={styles.totalRow}>
-               <Text style={styles.totalLabel}>Total TTC</Text>
-               <Text style={styles.totalValue}>
-                 {parseFloat(bill.ttc).toFixed(2)} €
-               </Text>
-             </View>
-           </View>
-         </View>
+          <View style={styles.card}>
+            {/* bill table */}
+            <View style={styles.table}>
+              <View style={styles.row}>
+                <Text style={{ fontWeight: '600', fontSize: 15, width: '10%' }}>
+                  N°
+                </Text>
+                <Text style={{ fontWeight: '600', fontSize: 15, width: '50%' }}>
+                  Produit
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: '600',
+                    fontSize: 15,
+                    width: '15%',
+                    textAlign: 'right',
+                  }}
+                >
+                  Qtt
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: '600',
+                    fontSize: 15,
+                    width: '25%',
+                    textAlign: 'right',
+                  }}
+                >
+                  Total
+                </Text>
+              </View>
+              {items.map((item, index) => (
+                <View
+                  key={item.id}
+                  style={[
+                    styles.row,
+                    index % 2 === 0
+                      ? { backgroundColor: '#fff' }
+                      : { backgroundColor: '#f3f4f6' },
+                  ]}
+                >
+                  <Text style={{ fontSize: 15, width: '10%' }}>
+                    {index + 1}
+                  </Text>
+                  <Text style={{ fontSize: 15, width: '50%' }}>
+                    {item.description}
+                  </Text>
+                  <Text
+                    style={{ fontSize: 15, width: '15%', textAlign: 'right' }}
+                  >
+                    {parseFloat(item.quantity).toFixed(2)}{' '}
+                  </Text>
+                  <Text
+                    style={{ fontSize: 15, width: '25%', textAlign: 'right' }}
+                  >
+                    {parseFloat(item.price * item.quantity).toFixed(2)} €
+                  </Text>
+                </View>
+              ))}
+            </View>
+            {/* Totals */}
+          </View>
+          <View style={{ alignItems: 'flex-end' }}>
+            <View style={[styles.card]}>
+              <View style={styles.row}>
+                <Text style={styles.text}>TOTAL HT </Text>
+                <Text style={styles.text}>
+                  {parseFloat(bill.ht).toFixed(2)} €
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.text}>TVA {tva}% </Text>
+                <Text style={styles.text}>
+                  {parseFloat((bill.ht * tva) / 100).toFixed(2)} €
+                </Text>
+              </View>
+              <View style={styles.totalRow}>
+                <Text style={styles.totalLabel}>Total TTC</Text>
+                <Text style={styles.totalValue}>
+                  {parseFloat(bill.ttc).toFixed(2)} €
+                </Text>
+              </View>
+            </View>
+          </View>
 
-         {/* <TouchableOpacity style={styles.button}>
+          {/* <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Download PDF</Text>
       </TouchableOpacity> */}
-       </ScrollView>
-     )}
-   </>
- );
+        </ScrollView>
+      )}
+    </>
+  );
 }
 
 const styles = StyleSheet.create({

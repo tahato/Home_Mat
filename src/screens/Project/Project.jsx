@@ -21,7 +21,7 @@ export default function Project({ route }) {
   const [projectInfo, setProjectInfo] = useState([]);
   const [loading, setLoading] = useState(true);
   const { setProjectId, setConceptions, setBillId } = useGlobalContext();
-  const { id, loaded } = route.params;
+  const { id, firstLoading } = route.params;
   useFocusEffect(
     useCallback(() => {
       setProjectId(parseInt(id));
@@ -35,7 +35,7 @@ export default function Project({ route }) {
       setConceptions(data.conceptions);
       setBillId(data.order_id ?? data.bill_id);
       setLoading(false);
-      loaded();
+      firstLoading.current=true;
     } catch (e) {
       console.log('error get project', e);
     }

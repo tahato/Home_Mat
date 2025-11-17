@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import GlobalProvider from '../context/GlobaleProvider';
-import index from '../index';
+import Index from '../Index';
 import Login from '../screens/login/Login';
 import HomeNavigation from '../navigation/HomeNavigation/HomeNavigation';
 import ProjectNavigation from '../navigation/ProjectNavigation/ProjectNavigation';
@@ -16,8 +16,16 @@ export default function MainNavigation() {
     <GlobalProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Index">
-          <Stack.Screen name="Index" component={index} />
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Index"
+            component={Index}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="HomeNavigation"
             component={HomeNavigation}

@@ -9,7 +9,6 @@ import { useGlobalContext } from '../../context/GlobaleProvider';
 export default function ProjectNavigation({ route }) {
   const Tabs = createMaterialTopTabNavigator();
   const { id, client } = route.params;
-  console.log(id, client);
   const { setClient } = useGlobalContext();
   const firstLoading = useRef(false);
 
@@ -50,9 +49,7 @@ export default function ProjectNavigation({ route }) {
       <Tabs.Screen
         name="Plan"
         component={Project}
-        // options={{ title: 'Plan' }}
-        initialParams={{ id, loaded: () => (firstLoading.current = true) }}
-        // initialParams={{ loaded: () => (firstLoading.current = true) }}
+        initialParams={{ id, firstLoading }}
       />
       <Tabs.Screen name="Facture" component={Bill} />
       <Tabs.Screen name="Images" component={Images} />

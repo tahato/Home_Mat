@@ -87,10 +87,16 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            storeFile file('homemat25.keystore')
+            storePassword 'homematapk25'
+            keyAlias 'homemat25'
+            keyPassword 'homematapk25'
+        }
+        release {
+            storeFile file('homemat25.keystore')
+            storePassword 'homematapk25'
+            keyAlias 'homemat25'
+            keyPassword 'homematapk25'
         }
     }
     buildTypes {

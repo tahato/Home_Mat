@@ -64,7 +64,7 @@ export default function Images() {
           <View style={styles.dropdownContainer}>
             <Dropdown
               style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-              placeholder={isFocus ?? 'Conception N° 1'}
+              placeholder={'Conception N° 1'}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}

@@ -2,7 +2,7 @@ import { Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableWithoutFeedb
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Form from '../../components/Form'
-export default function login() {
+export default function Login() {
   return (
    <SafeAreaView style={{flex:1}} edges={['top', 'bottom']} >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
