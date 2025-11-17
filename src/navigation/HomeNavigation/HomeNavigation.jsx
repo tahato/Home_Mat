@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { BackHandler, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../screens/home/Home';
 import Dashboard from '../../screens/Dashboard/Dashboard';
@@ -7,9 +7,27 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function HomeNavigation() {
   const Tabs = createBottomTabNavigator();
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', BackHandler.exitApp);
+    return () => backHandler.remove();
+  }, [])
+  
   return (
     <Tabs.Navigator
       screenOptions={{
+        tabBarButton: props => (
+          <TouchableOpacity
+            {...props}
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+
+              width: '100%',
+              height: '100%',
+            }}
+            activeOpacity={0.7}
+          />
+        ),
         headerShown: false,
         tabBarActiveTintColor: '#293846',
         tabBarShowLabel: false,

@@ -57,7 +57,7 @@ export default function Images() {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <Text>Aucune facture trouvée </Text>
+          <Text>Aucune image trouvée </Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
