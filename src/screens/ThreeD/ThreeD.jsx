@@ -19,7 +19,7 @@ export default function ThreeD() {
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [value]),
+    }, [value, projectId]),
   );
   const fetchData = async () => {
     try {

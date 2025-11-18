@@ -1,5 +1,5 @@
 import { useGlobalContext } from '@/context/GlobaleProvider';
-// import { FontAwesome5 } from "@expo/vector-icons";
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 // import { router } from "expo-router";
 import { useState } from 'react';
@@ -84,7 +84,7 @@ export default function Form() {
             style={styles.eye}
             onPress={() => setShowPassword(!showPassword)}
           >
-            {/* <FontAwesome5 name={showPassword ? "eye-slash" : "eye"} /> */}
+            <FontAwesome5 name={showPassword ? "eye-slash" : "eye"} />
           </TouchableOpacity>
         </View>
         <View style={styles.formField}>

@@ -25,7 +25,7 @@ export default function Images() {
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [value]),
+    }, [value,conceptions]),
   );
   const fetchData = async () => {
     try {
