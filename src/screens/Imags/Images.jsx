@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useGlobalContext } from '../../context/GlobaleProvider';
 import { useFocusEffect } from '@react-navigation/native';
 import {getImages} from '../../api/getImages'
@@ -14,13 +14,17 @@ export default function Images() {
     label: `Conceptin N° ${index + 1}`,
     value: item.id,
   }));
-  const [value, setValue] = useState(data[0]?.value);
+  const [value, setValue] = useState(null);
   const [imgs, setImgs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [path, setPath] = useState('');
   const [index, setIndex] = useState(0);
   const [paths, setPaths] = useState([]);
+  useEffect(() => {
+    setValue(data[0]?.value)
+  }, [conceptions])
+  
 
   useFocusEffect(
     useCallback(() => {

@@ -7,10 +7,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function HomeNavigation() {
   const Tabs = createBottomTabNavigator();
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', BackHandler.exitApp);
-    return () => backHandler.remove();
-  }, [])
+ useEffect(() => {
+   const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+     BackHandler.exitApp();
+     return true;
+   });
+
+   return () => backHandler.remove();
+ }, []);
   
   return (
     <Tabs.Navigator
