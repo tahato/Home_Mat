@@ -1,10 +1,10 @@
 import axios from "axios";
 
 import { getItem } from "../../tools/AsyncStorage";
+import { API_URL } from './apiUrl';
+import { company_code } from './apiUrl';
 
 export const getDashboard = async (id) => {
-  const API_URL = 'https://homemattest.scriptdzshock.com';
-  const company_code = 'b2fb';
   const token = await getItem("token");
   const response = await axios
     .get(`${API_URL}/api/homemat/dashboard?company_code=${company_code}`, {

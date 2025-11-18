@@ -5,6 +5,9 @@ import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchInput from '../../components/SearchInput'
 import HomeInfoCard from '../../components/HomeInfoCard';
+import { API_URL } from '../../api/apiUrl';
+import { company_code } from '../../api/apiUrl';
+
 export default function Home() {
    const [refreshing, setRefreshing] = useState(false);
    const [projects, setProjects] = useState([]);
@@ -13,8 +16,6 @@ export default function Home() {
    const [loading, setLoading] = useState(false);
    const [search, setSearch] = useState('');
    const [token, setToken] = useState();
-   const API_URL = 'https://homemattest.scriptdzshock.com';
-   const company_code = 'b2fb';
    // ✅ Fetch projects
    const fetchData = useCallback(
      async (reset = false) => {

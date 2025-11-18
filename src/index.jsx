@@ -9,7 +9,7 @@ export default function Index() {
   const getToken = async () => {
     const token = await getItem('token');
     navigation.navigate(!!token ? 'HomeNavigation' : 'Login');
-    //  router.replace('/login');
+    //  navigation.navigate('Login');
   };
   useEffect(() => {
     getToken();

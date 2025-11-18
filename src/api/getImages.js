@@ -1,15 +1,17 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { getItem } from "../../tools/AsyncStorage";
+import { getItem } from '../../tools/AsyncStorage';
+import { API_URL } from './apiUrl';
+import { company_code } from './apiUrl';
+export const getImages = async (id, billId) => {
+  // const API_URL = 'https://homemattest.scriptdzshock.com';
+  console.log(id);
 
-export const getImages = async (id) => {
-  const API_URL = 'https://homemattest.scriptdzshock.com';
-  const company_code = 'b2fb';
-  const token = await getItem("token");
+  const token = await getItem('token');
   const response = await axios
     .post(
       `${API_URL}/api/homemat/conception/images?company_code=${company_code}`,
-      { id },
+      { id, bill_id: billId },
       {
         headers: {
           Authorization: `Bearer ${token}`,

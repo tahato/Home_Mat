@@ -5,8 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getItem } from '../../tools/AsyncStorage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { API_URL } from '../api/apiUrl';
 export default function Logout() {
-  const API_URL = 'https://homemattest.scriptdzshock.com';
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const handlLogout = async () => {

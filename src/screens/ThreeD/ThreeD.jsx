@@ -6,9 +6,8 @@ import { getItem } from '../../../tools/AsyncStorage';
 import { getProject } from '../../api/getProject';
 import { Dropdown } from 'react-native-element-dropdown';
 import WebView from 'react-native-webview';
-
+import { API_URL } from '../../api/apiUrl';
 export default function ThreeD() {
-  const API_URL = 'https://homemattest.scriptdzshock.com'
   const [appId, setAppId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [project, setProject] = useState(true);

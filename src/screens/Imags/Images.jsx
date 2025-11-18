@@ -9,7 +9,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 export default function Images() {
   const [isFocus, setIsFocus] = useState(false);
-  const { conceptions } = useGlobalContext();
+  const { conceptions, billId } = useGlobalContext();
   const data = conceptions.map((item, index) => ({
     label: `Conceptin N° ${index + 1}`,
     value: item.id,
@@ -30,7 +30,7 @@ export default function Images() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const data = await getImages(value);
+      const data = await getImages(value, billId);
 
       setImgs(data.images);
       setPaths(

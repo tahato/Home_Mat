@@ -14,14 +14,14 @@ import {
 import images from '../constants/images';
 import { setItem } from '../../tools/AsyncStorage';
 import { useNavigation } from '@react-navigation/native';
-
+import { API_URL } from '../api/apiUrl';
+import { company_code } from '../api/apiUrl';
 export default function Form() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const API_URL = 'https://homemattest.scriptdzshock.com';
-  const company_code = 'b2fb';
+ 
   const navigation = useNavigation();
   const handleLogin = async () => {
     if (email == '' || password == '') {
