@@ -37,6 +37,8 @@ export default function Bill() {
     } catch (e) {
       console.log('error get project', e);
     }
+    console.log('type of bill: ',typeof bill);
+    
   };
   return (
     <>
@@ -72,7 +74,7 @@ export default function Bill() {
             <Text style={styles.text}>
               Date:{' '}
               <Text style={{ fontWeight: 'bold' }}>
-                {moment(bill.date2 ?? bill.data1).format('DD/MM/YYYY')}
+                {bill['date'+bill.level]!=undefined && moment(bill['date'+bill.level]).format('DD/MM/YYYY')}
               </Text>
             </Text>
           </View>
@@ -234,6 +236,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#293846',
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   // button: {
   //   backgroundColor: "#1C84C6",

@@ -11,6 +11,7 @@ import { company_code } from '../../api/apiUrl';
 export default function Home() {
    const [refreshing, setRefreshing] = useState(false);
    const [projects, setProjects] = useState([]);
+   const [totalStatus, setTotalStatus] = useState(0);
    const [lastPage, setLastPage] = useState(1);
    const [page, setPage] = useState(1);
    const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ export default function Home() {
            },
          });
 
-         const { data, last_page } = res.data;
+         const { data, last_page } = res.data.projects;
          setLastPage(last_page);
 
          setProjects(prev =>
@@ -48,6 +49,7 @@ export default function Home() {
          );
 
          setPage(prev => (reset ? 2 : prev + 1));
+         setTotalStatus(res.data.totalStatus)
        } catch (err) {
          console.log(
            'Error fetching data:',
@@ -93,7 +95,7 @@ export default function Home() {
          contentContainerStyle={{ paddingBottom: 40, gap: 20 }}
          data={projects}
          keyExtractor={item => String(item.id)}
-         renderItem={({ item }) => <HomeInfoCard project={item} />}
+         renderItem={({ item }) => <HomeInfoCard project={item} totalStatus={totalStatus} />}
          onEndReached={() => {
            if (!loading && page <= lastPage) fetchData();
          }}

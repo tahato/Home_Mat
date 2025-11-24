@@ -3,7 +3,10 @@ import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../screens/home/Home';
 import Dashboard from '../../screens/Dashboard/Dashboard';
+import Shipping from '../../screens/Shipping/Shipping';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 export default function HomeNavigation() {
   const Tabs = createBottomTabNavigator();
@@ -61,6 +64,16 @@ export default function HomeNavigation() {
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="home" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Shipping"
+        component={Shipping}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons size={28} name="truck" color={color} />
           ),
         }}
       />

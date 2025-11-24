@@ -10,8 +10,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/GlobaleProvider';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DropDownList from '../../components/DropDownList';
-import {getProject} from '../../api/getProject'
-import Estimation from '../../components/listMenus/Estimation'
+import { getProject } from '../../api/getProject';
+import Estimation from '../../components/listMenus/Estimation';
 import BonCommande from '../../components/listMenus/BonCommande';
 import Production from '../../components/listMenus/Production';
 import Livraison from '../../components/listMenus/Livraison';
@@ -33,9 +33,9 @@ export default function Project({ route }) {
       const data = await getProject(id);
       setProjectInfo(data);
       setConceptions(data.conceptions);
-      setBillId(data.order_id ?? data.bill_id);
+      setBillId(data.bill_id);
       setLoading(false);
-      firstLoading.current=true;
+      firstLoading.current = true;
     } catch (e) {
       console.log('error get project', e);
     }
@@ -65,13 +65,13 @@ export default function Project({ route }) {
               onToggle={
                 () => setOpenIndex(openIndex === 1 ? null : 1) // close others
               }
-              waiting={!projectInfo?.quotation_level && true}
-              checked={projectInfo.quotation_level && true}
+              waiting={projectInfo?.level == null && true}
+              checked={projectInfo.level >= 1 && true}
             >
               <Estimation
-                level={projectInfo.quotation_level}
-                number={projectInfo.quotation_number}
-                ttc={projectInfo.quotation_ttc}
+                level={projectInfo.level}
+                // number={projectInfo['number'+projectInfo.level]}
+                ttc={projectInfo.ttc}
               />
             </DropDownList>
             <DropDownList
@@ -83,19 +83,14 @@ export default function Project({ route }) {
               onToggle={
                 () => setOpenIndex(openIndex === 2 ? null : 2) // close others
               }
-              waiting={
-                projectInfo.quotation_level == 1 && !projectInfo.order_level
-                  ? true
-                  : false
-              }
-              checked={projectInfo.order_level && true}
+              waiting={projectInfo.level == 1 && true}
+              checked={projectInfo.level >= 2 && true}
             >
               <BonCommande
-                quotation_level={projectInfo.quotation_level}
-                order_level={projectInfo.order_level}
-                number={projectInfo.order_number}
+                level={projectInfo.level}
+                // number={projectInfo.['number'+ projectInfo.level]}
                 conceptions={projectInfo.conceptions}
-                ttc={projectInfo.quotation_ttc}
+                ttc={projectInfo.ttc}
                 gameesQtt={{
                   excellence: projectInfo.excel_quantity,
                   elégance: projectInfo.eleg_quantity,
@@ -111,12 +106,12 @@ export default function Project({ route }) {
               onToggle={
                 () => setOpenIndex(openIndex === 3 ? null : 3) // close others
               }
-              waiting={projectInfo.order_level && true}
+              waiting={projectInfo.level==2 && true}
               checked={projectInfo.state >= 4}
             >
               <Production
                 state={projectInfo.state}
-                level={projectInfo.order_level}
+                level={projectInfo.level}
               />
             </DropDownList>
             <DropDownList
@@ -132,7 +127,7 @@ export default function Project({ route }) {
             >
               <Livraison
                 state={projectInfo.state}
-                level={projectInfo.order_level}
+                level={projectInfo.level}
               />
             </DropDownList>
           </ScrollView>
@@ -177,4 +172,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
-

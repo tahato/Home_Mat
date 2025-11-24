@@ -5,7 +5,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { useGlobalContext } from '../context/GlobaleProvider';
 import { useNavigation } from '@react-navigation/native';
 
-export default function HomeInfoCard({ project }) {
+export default function HomeInfoCard({ project, totalStatus }) {
   const navigation = useNavigation();
   const { setProjectName } = useGlobalContext();
   const client =
@@ -17,13 +17,23 @@ export default function HomeInfoCard({ project }) {
     ' ' +
     (project.nameResp ? project.nameResp : '');
 
-  let percentPayed = 0;
-  let percentDelay = 0;
-  if (30 > 0) {
-    percentPayed = ((50 / 100) * 100).toFixed(2);
+  let percentStatus = 0;
+  let status;
+
+  if (project?.state === 100) {
+    status = 11;
+  } else if (project?.state != null) {
+    status = project.state + 4;
+  } else if (project?.state == null && project.level === 2) {
+    status = 3;
+  } else {
+    status = project.level;
   }
-  if (10 > 0) {
-    percentDelay = ((50 / 100) * 100).toFixed(2);
+  // console.log(project.id,'statusssssssssss',status);
+
+  // let percentWaiting = 0;
+  if (30 > 0) {
+    percentStatus = ((status / (totalStatus + 4)) * 100).toFixed();
   }
 
   const handlePress = () => {
@@ -37,9 +47,8 @@ export default function HomeInfoCard({ project }) {
   const radius = 40;
   const strokeWidth = 12;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (circumference * percentPayed) / 100;
-  const strokeDashoffsetDelay =
-    circumference - (circumference * (percentPayed + percentDelay)) / 100;
+  const strokeDashoffset =
+    circumference - (circumference * percentStatus) / 100;
 
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
@@ -72,14 +81,15 @@ export default function HomeInfoCard({ project }) {
           <View style={styles.details}>
             <Text style={{ fontWeight: 'bold' }}>Etats: </Text>
             <Text>
-              {(project.quotation_level == 1 || null) &&
-              project.order_level == null
-                ? 'Estimation'
-                : project.order_level == 2 && project.state == null
-                ? 'Bon de commande'
-                : project.state != null && project.state < 5
+              {project.state >= 4
+                ? 'Livraison'
+                : project.level == 2 &&
+                  project.delivery_id != null &&
+                  project.state < 4
                 ? 'Production'
-                : project.state >= 5 && 'Livraison'}
+                : project.level == 2 && project.delivery_id == null
+                ? 'Bon de commande'
+                : 'Estimation'}
             </Text>
           </View>
 
@@ -101,7 +111,7 @@ export default function HomeInfoCard({ project }) {
             </Text>
             {/* <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 13 }}>001-0925</Text> */}
           </View>
-          <Svg width={90} height={90} viewBox="0 0 100 100">
+          <Svg width={90} height={90} viewBox="0 0 100 100" >
             <Circle
               cx="50"
               cy="50"
@@ -110,7 +120,7 @@ export default function HomeInfoCard({ project }) {
               strokeWidth={strokeWidth}
               fill="none"
             />
-            <Circle
+            {/* <Circle
               cx="50"
               cy="50"
               r={radius}
@@ -118,11 +128,11 @@ export default function HomeInfoCard({ project }) {
               strokeWidth={strokeWidth}
               fill="none"
               strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffsetDelay}
+              strokeDashoffset={11/100}
               strokeLinecap="round"
               rotation="-90"
               origin="50,50"
-            />
+            /> */}
             <Circle
               cx="50"
               cy="50"
@@ -136,7 +146,9 @@ export default function HomeInfoCard({ project }) {
               rotation="-90"
               origin="50,50"
             />
-            <Text style={styles.percentage}>55</Text>
+            <Text style={styles.percentage}>
+              {percentStatus.toString().padStart(2, '0')} %
+            </Text>
           </Svg>
         </View>
       </View>
@@ -198,6 +210,7 @@ const styles = StyleSheet.create({
     color: 'black',
     top: 35,
     left: 35,
+    transform: [{ translateX: '-15%'}],
   },
   cardInfo: {
     display: 'flex',

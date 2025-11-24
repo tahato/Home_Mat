@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import DropDownList from "../DropDownList";
 
-export default function BonCommande({
-  quotation_level,
-  order_level,
-  number,
-  conceptions,
-  ttc,
-  gameesQtt,
-}) {
+export default function BonCommande({ level, number, conceptions, ttc, gameesQtt }) {
   const [contentHeight, setContentHeight] = useState(0);
   const [openIndex, setOpenIndex] = useState(null);
   const [gammes, setGammes] = useState([]);
@@ -25,7 +18,7 @@ export default function BonCommande({
       }, {});
 
       // ✅ Convert object into an array
-      const gammes = Object.keys(grouped).map((key) => ({
+      const gammes = Object.keys(grouped).map(key => ({
         gamme: key,
         conceptions: grouped[key],
         qtt: gameesQtt[key],
@@ -46,30 +39,30 @@ export default function BonCommande({
         onToggle={
           () => setOpenIndex(openIndex === 1 ? null : 1) // close others
         }
-        waiting={quotation_level == 1 && !order_level ? true : false}
-        checked={order_level && true}
+        waiting={level == 1 && true}
+        checked={level == 2 && true}
       >
         <View
-          onLayout={(e) => {
+          onLayout={e => {
             setContentHeight(e.nativeEvent.layout.height);
           }}
           style={styles.menu}
         >
           <View style={styles.datafield}>
             <View>
-              <Text style={{ fontWeight: "bold" }}>Garde du corp Droit</Text>
+              <Text style={{ fontWeight: 'bold' }}>Garde du corp Droit</Text>
               {/* <Image></Image> */}
             </View>
-            {gammes?.map((gamme) => (
+            {gammes?.map(gamme => (
               <View style={styles.detailsBetween} key={gamme.conceptions[0].id}>
-                <Text>Gamme {order_level && gamme.gamme}</Text>
-                <Text style={{ fontWeight: "300" }}> {gamme.qtt} m</Text>
+                <Text>Gamme {level && gamme.gamme}</Text>
+                <Text style={{ fontWeight: '300' }}> {gamme.qtt} m</Text>
               </View>
             ))}
             <View style={styles.detailsBetween}>
-              <Text>{order_level && ttc} €</Text>
-              <Text style={{ fontWeight: "300" }}>
-                {order_level && conceptions.length} Conception(s)
+              <Text>{level && ttc} €</Text>
+              <Text style={{ fontWeight: '300' }}>
+                {level && conceptions.length} Conception(s)
               </Text>
             </View>
           </View>
@@ -86,15 +79,15 @@ export default function BonCommande({
         title="Envois au client"
         fieldStyle={styles.listfield}
         lsit={false}
-        waiting={quotation_level == 1 && !order_level ? true : false}
-        checked={order_level && true}
+        waiting={level == 1 && true}
+        checked={level == 2 && true}
       />
       <DropDownList
         title="Validation"
         fieldStyle={styles.listfield}
         lsit={false}
-        waiting={quotation_level == 1 && !order_level ? true : false}
-        checked={order_level && true}
+        waiting={level == 1 && true}
+        checked={level == 2 && true}
       />
     </View>
   );
