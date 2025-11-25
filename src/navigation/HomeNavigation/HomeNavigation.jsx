@@ -1,5 +1,5 @@
 import { BackHandler, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../screens/home/Home';
 import Dashboard from '../../screens/Dashboard/Dashboard';
@@ -10,14 +10,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 export default function HomeNavigation() {
   const Tabs = createBottomTabNavigator();
- useEffect(() => {
-   const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-     BackHandler.exitApp();
-     return true;
-   });
+//  useEffect(
+//   useCallback(() => {
+//    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+//      BackHandler.exitApp();
+//      return true;
+//    });
 
-   return () => backHandler.remove();
- }, []);
+//    return () => backHandler.remove();
+//  }, []));
   
   return (
     <Tabs.Navigator

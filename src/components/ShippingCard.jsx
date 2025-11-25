@@ -1,36 +1,59 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ShippingCard({ shipping }) {
-    console.log(shipping.name);
-    
+const navigation = useNavigation()
+const nav =()=>{
+   navigation.navigate('ShippedBills', {
+     id: String(shipping.id),
+   });
+}
   return (
-    <View styles={styles.container}>
-      <View styles={styles.left}>
-        <Text>{shipping.name}</Text>
-        <Text>max pallets number: {shipping.max_pallets_number}</Text>
-        <Text>max weight: {shipping.max_weight}</Text>
+    <TouchableOpacity style={styles.container} onPress={nav}>
+      <View style={styles.left}>
+        <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+          {shipping.name}
+        </Text>
+        {/* <View style={styles.info}>
+          <Text>max pallets number:</Text>
+          <Text style={styles.text}> {shipping.max_pallets_number}</Text>
+        </View>
+        <View style={styles.info}>
+          <Text>max weight: </Text>
+          <Text style={styles.text}>{shipping.max_weight}</Text>
+        </View> */}
       </View>
-      <View styles={styles.right}>
-        <Text>{shipping.date}</Text>
-        <Text>max pallets number: {shipping.status}</Text>
+      <View style={styles.right}>
+        <Text style={styles.text}>{shipping.date}</Text>
+        <Text style={styles.text}>{shipping.status}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-    container:{
-        display:'flex',
-        flex:1,
-        flexDirection:'row',
-        backgroundColor:'red'
-        
-    },
-    left:{
+  container: {
+    backgroundColor:'#ffffff',
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems:'center',
+    justifyContent: 'space-between',
+    padding:10,
+    margin:5,
+    borderRadius:10,
+    elevation:7,
 
-    },
-    right:{
-
-    }
+  },
+  left: {},
+  right: {alignItems:'flex-end'},
+  text: {
+    fontSize:14,
+    fontWeight:'semibold'
+  },
+  info: {
+    flexDirection:'row',
+    gap:2
+  },
 });

@@ -6,6 +6,7 @@ import Index from '../Index';
 import Login from '../screens/login/Login';
 import HomeNavigation from '../navigation/HomeNavigation/HomeNavigation';
 import ProjectNavigation from '../navigation/ProjectNavigation/ProjectNavigation';
+import ShippedBills from '../screens/ShippedBills';
 import Mainheader from '../components/headers/Mainheader';
 import HeaderProject from '../components/headers/HeaderProject';
 
@@ -37,6 +38,14 @@ export default function MainNavigation() {
           <Stack.Screen
             name="ProjectNavigation"
             component={ProjectNavigation}
+            options={{
+              headerTitle: '',
+              header: () => <HeaderProject />,
+            }}
+          />
+          <Stack.Screen
+            name="ShippedBills"
+            component={ShippedBills}
             options={{
               headerTitle: '',
               header: () => <HeaderProject />,

@@ -13,7 +13,7 @@ export default function Shipping() {
   const [lastPage, setLastPage] = useState(1);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(false);
+  const [data, setData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [token, setToken] = useState();
 
@@ -43,7 +43,7 @@ export default function Shipping() {
             ? data
             : [
                 ...prev,
-                ...data.filter(p => !prev.some(old => old.id === p.id)),
+                ...data?.filter(p => !prev.some(old => old.id === p.id)),
               ],
         );
 
@@ -66,7 +66,6 @@ export default function Shipping() {
   useEffect(() => {
     fetchData(true);
   }, [token]);
-  console.log("dattttttttta",data);
   
 
   // ✅ Search effect (with delay)
@@ -84,7 +83,8 @@ export default function Shipping() {
   }, [fetchData]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'#ffffff',flex:1}}>
+      <Text style={{textAlign:'center',padding:5,fontSize:18,fontWeight:'bold' }}>Expéditions </Text>
       {loading ? (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#007bff" />

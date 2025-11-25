@@ -1,119 +1,142 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import {
+  ActivityIndicator,
+  BackHandler,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getItem } from '../../../tools/AsyncStorage';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SearchInput from '../../components/SearchInput'
+import SearchInput from '../../components/SearchInput';
 import HomeInfoCard from '../../components/HomeInfoCard';
 import { API_URL } from '../../api/apiUrl';
 import { company_code } from '../../api/apiUrl';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Home() {
-   const [refreshing, setRefreshing] = useState(false);
-   const [projects, setProjects] = useState([]);
-   const [totalStatus, setTotalStatus] = useState(0);
-   const [lastPage, setLastPage] = useState(1);
-   const [page, setPage] = useState(1);
-   const [loading, setLoading] = useState(false);
-   const [search, setSearch] = useState('');
-   const [token, setToken] = useState();
-   // ✅ Fetch projects
-   const fetchData = useCallback(
-     async (reset = false) => {
-       const token = await getItem('token');
-       setToken(token);
-       if (loading || !token) return;
-       setLoading(true);
-       try {
-         const res = await axios.get(`${API_URL}/api/homemat/projects`, {
-           params: {
-             company_code: company_code,
-             page: reset ? 1 : page,
-             search: search || '',
-           },
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         });
+  const [refreshing, setRefreshing] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [totalStatus, setTotalStatus] = useState(0);
+  const [lastPage, setLastPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState('');
+  const [token, setToken] = useState();
+  // ✅ Fetch projects
+  const fetchData = useCallback(
+    async (reset = false) => {
+      const token = await getItem('token');
+      setToken(token);
+      if (loading || !token) return;
+      setLoading(true);
+      try {
+        const res = await axios.get(`${API_URL}/api/homemat/projects`, {
+          params: {
+            company_code: company_code,
+            page: reset ? 1 : page,
+            search: search || '',
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-         const { data, last_page } = res.data.projects;
-         setLastPage(last_page);
+        const { data, last_page } = res.data.projects;
+        setLastPage(last_page);
 
-         setProjects(prev =>
-           reset
-             ? data
-             : [
-                 ...prev,
-                 ...data.filter(p => !prev.some(old => old.id === p.id)),
-               ],
-         );
+        setProjects(prev =>
+          reset
+            ? data
+            : [
+                ...prev,
+                ...data.filter(p => !prev.some(old => old.id === p.id)),
+              ],
+        );
 
-         setPage(prev => (reset ? 2 : prev + 1));
-         setTotalStatus(res.data.totalStatus)
-       } catch (err) {
-         console.log(
-           'Error fetching data:',
-           err?.response?.status,
-           err?.message,
-         );
-       } finally {
-         setLoading(false);
-         setRefreshing(false);
-       }
-     },
-     [page, token, search, loading],
-   );
+        setPage(prev => (reset ? 2 : prev + 1));
+        setTotalStatus(res.data.totalStatus);
+      } catch (err) {
+        console.log(
+          'Error fetching data:',
+          err?.response?.status,
+          err?.message,
+        );
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [page, token, search, loading],
+  );
 
-   // ✅ Initial load
-   useEffect(() => {
-     fetchData(true);
-   }, [token]);
+  // ✅ Initial load
+  useEffect(() => {
+    fetchData(true);
+  }, [token]);
 
-   // ✅ Search effect (with delay)
-   useEffect(() => {
-     const delay = setTimeout(() => {
-       fetchData(true);
-     }, 500);
-     return () => clearTimeout(delay);
-   }, [search]);
+  // ✅ Search effect (with delay)
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      fetchData(true);
+    }, 500);
+    return () => clearTimeout(delay);
+  }, [search]);
 
-   // ✅ Pull-to-refresh
-   const onRefresh = useCallback(() => {
-     setRefreshing(true);
-     fetchData(true);
-   }, [fetchData]);
+  // ✅ Pull-to-refresh
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData(true);
+  }, [fetchData]);
 
-   return (
-     <SafeAreaView
-       style={{ backgroundColor: 'white', flex: 1, paddingTop: 20 }}
-       edges={[]}
-     >
-       <SearchInput search={search} setSearch={setSearch} />
-       
-       <FlatList
-         style={styles.container}
-         contentContainerStyle={{ paddingBottom: 40, gap: 20 }}
-         data={projects}
-         keyExtractor={item => String(item.id)}
-         renderItem={({ item }) => <HomeInfoCard project={item} totalStatus={totalStatus} />}
-         onEndReached={() => {
-           if (!loading && page <= lastPage) fetchData();
-         }}
-         onEndReachedThreshold={0.5}
-         refreshing={refreshing}
-         onRefresh={onRefresh}
-         ListFooterComponent={
-           loading ? (
-             <ActivityIndicator
-               size="large"
-               color="#000"
-               style={{ marginVertical: 20 }}
-             />
-           ) : null
-         }
-       />
-     </SafeAreaView>
-   );
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          BackHandler.exitApp();
+          return true;
+        },
+      );
+
+      return () => backHandler.remove();
+    }, []),
+  );
+  return (
+    <SafeAreaView
+      style={{ backgroundColor: 'white', flex: 1, paddingTop: 20 }}
+      edges={[]}
+    >
+      <SearchInput search={search} setSearch={setSearch} />
+
+      <FlatList
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 40, gap: 20 }}
+        data={projects}
+        keyExtractor={item => String(item.id)}
+        renderItem={({ item }) => (
+          <HomeInfoCard project={item} totalStatus={totalStatus} />
+        )}
+        onEndReached={() => {
+          if (!loading && page <= lastPage) fetchData();
+        }}
+        onEndReachedThreshold={0.5}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        ListFooterComponent={
+          loading ? (
+            <ActivityIndicator
+              size="large"
+              color="#000"
+              style={{ marginVertical: 20 }}
+            />
+          ) : null
+        }
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
