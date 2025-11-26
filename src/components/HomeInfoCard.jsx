@@ -20,20 +20,20 @@ export default function HomeInfoCard({ project, totalStatus }) {
   let percentStatus = 0;
   let status;
 
-  if (project?.state === 100) {
-    status = 11;
+  if (parseInt(project?.state) === 100) {
+    status = parseInt(totalStatus) + 4;
   } else if (project?.state != null) {
-    status = project.state + 4;
+    status = parseInt(project.state) + 4;
   } else if (project?.state == null && project.level === 2) {
     status = 3;
   } else {
-    status = project.level;
+    status = parseInt(project.level);
   }
   // console.log(project.id,'statusssssssssss',status);
 
   // let percentWaiting = 0;
   if (30 > 0) {
-    percentStatus = ((status / (totalStatus + 4)) * 100).toFixed();
+    percentStatus = ((status / (parseInt(totalStatus) + 4)) * 100).toFixed();
   }
 
   const handlePress = () => {
