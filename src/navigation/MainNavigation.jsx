@@ -6,9 +6,9 @@ import Index from '../Index';
 import Login from '../screens/login/Login';
 import HomeNavigation from '../navigation/HomeNavigation/HomeNavigation';
 import ProjectNavigation from '../navigation/ProjectNavigation/ProjectNavigation';
-import ShippedBills from '../screens/ShippedBills';
 import Mainheader from '../components/headers/Mainheader';
 import HeaderProject from '../components/headers/HeaderProject';
+import ShippingDetails from '../screens/ShippingDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,8 +44,8 @@ export default function MainNavigation() {
             }}
           />
           <Stack.Screen
-            name="ShippedBills"
-            component={ShippedBills}
+            name="ShippingDetails"
+            component={ShippingDetails}
             options={{
               headerTitle: '',
               header: () => <HeaderProject />,

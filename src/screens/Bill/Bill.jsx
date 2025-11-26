@@ -14,10 +14,11 @@ import moment from 'moment';
 
 export default function Bill() {
   const [bill, setBill] = useState([]);
+  const [shipping, setShipping] = useState();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tva, setTva] = useState('');
-  const { billId, client } = useGlobalContext();
+  const { billId, shippingId, client } = useGlobalContext();
   useFocusEffect(
     useCallback(() => {
       if (billId) {
@@ -29,17 +30,20 @@ export default function Bill() {
   );
   const fetchData = async () => {
     try {
-      const data = await getBillItems(billId);
-      setBill(data);
-      setItems(data.items);
-      setTva(data.taxevalues[0].value);
+      const data = await getBillItems(billId, shippingId);
+      setBill(data.data);
+      setItems(data.data.items);
+      setTva(data.data.taxevalues[0].value);
+      setShipping(data.shipping);
+
       setLoading(false);
     } catch (e) {
       console.log('error get project', e);
     }
-    console.log('type of bill: ',typeof bill);
-    
+    console.log('type of bill: ', typeof bill);
   };
+  console.log('shhhhhhho', shipping);
+
   return (
     <>
       {loading ? (
@@ -74,9 +78,24 @@ export default function Bill() {
             <Text style={styles.text}>
               Date:{' '}
               <Text style={{ fontWeight: 'bold' }}>
-                {bill['date'+bill.level]!=undefined && moment(bill['date'+bill.level]).format('DD/MM/YYYY')}
+                {bill['date' + bill.level] != undefined &&
+                  moment(bill['date' + bill.level]).format('DD/MM/YYYY')}
               </Text>
             </Text>
+            {shipping && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Text style={styles.text}>
+                  Expédition:{' '}
+                  <Text style={{ fontWeight: 'bold' }}>{shipping?.name} </Text>
+                </Text>
+                <Text>Le: {moment(shipping?.date).format('DD/MM/YYYY')} </Text>
+              </View>
+            )}
           </View>
 
           <View style={styles.card}>

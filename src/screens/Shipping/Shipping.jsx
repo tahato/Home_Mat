@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   container: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
+    padding:15
   },
 });

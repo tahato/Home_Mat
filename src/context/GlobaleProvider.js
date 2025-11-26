@@ -5,6 +5,7 @@ export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({ children }) => {
   const [billId, setBillId] = useState(null);
+  const [shippingId, setShippingId] = useState(null);
   const [projectName, setProjectName] = useState("");
   const [projectId, setProjectId] = useState("");
   const [client, setClient] = useState("");
@@ -22,7 +23,9 @@ const GlobalProvider = ({ children }) => {
         conceptions,
         setConceptions,
         client,
-        setClient
+        setClient,
+        shippingId,
+        setShippingId
       }}
     >
       {children}

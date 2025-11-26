@@ -20,7 +20,8 @@ export default function Project({ route }) {
   const [openIndex, setOpenIndex] = useState(null);
   const [projectInfo, setProjectInfo] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { setProjectId, setConceptions, setBillId } = useGlobalContext();
+  const { setProjectId, setConceptions, setBillId, setShippingId } =
+    useGlobalContext();
   const { id, firstLoading } = route.params;
   useFocusEffect(
     useCallback(() => {
@@ -33,7 +34,8 @@ export default function Project({ route }) {
       const data = await getProject(id);
       setProjectInfo(data);
       setConceptions(data.conceptions);
-      setBillId(data.bill_id);
+      setBillId(data.bill_id); 
+      setShippingId(data.shipping_id); 
       setLoading(false);
       firstLoading.current = true;
     } catch (e) {

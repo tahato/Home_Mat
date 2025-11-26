@@ -3,12 +3,12 @@ import { getItem } from '../../tools/AsyncStorage';
 import { API_URL } from './apiUrl';
 import { company_code } from './apiUrl';
 
-export const getBillItems = async id => {
+export const getBillItems = async (id, shippingId) => {
   const token = await getItem('token');
   const response = await axios
     .post(
       `${API_URL}/api/homemat/bill/items?company_code=${company_code}`,
-      { id },
+      { id, shippingId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -16,7 +16,7 @@ export const getBillItems = async id => {
       },
     )
     .then(res => {
-      return res.data.data;
+      return res.data;
     })
     .catch(err => {
       console.log(err.message);

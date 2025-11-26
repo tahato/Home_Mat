@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function ShippingCard({ shipping }) {
 const navigation = useNavigation()
 const nav =()=>{
-   navigation.navigate('ShippedBills', {
+   navigation.navigate('ShippingDetails', {
      id: String(shipping.id),
    });
 }
